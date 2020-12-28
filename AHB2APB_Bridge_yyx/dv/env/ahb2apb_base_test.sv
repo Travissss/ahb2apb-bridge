@@ -31,21 +31,19 @@ class ahb2apb_base_test extends uvm_test;
 	
 	//Factory Registration
 	//
+	`uvm_component_utils(ahb2apb_base_test)
 
-	//------------------------------------------
-	// Constraints
-	//------------------------------------------
-
-	
 	//----------------------------------------------
 	// Methods
 	// ---------------------------------------------
 	// Standard UVM Methods:	
 	extern function new(string name = "ahb2apb_base_test", uvm_component parent);
 	extern virtual function void build_phase(uvm_phase phase);
+	extern virtual function void start_of_simulation_phase(uvm_phase phase);
 	extern virtual task main_phase(uvm_phase phase);
+	extern virtual function void report_phase(uvm_phase phase);
 	// User Defined Methods:
-	
+	extern function int num_uvm_errors();
 endclass
 
 //Constructor
@@ -56,6 +54,13 @@ endfunction
 //Build_Phase
 function void ahb2apb_base_test::build_phase(uvm_phase phase);
 	super.build_phase(phase);
+	ahb2apb_env_i = ahb2apb_env::type_id::create("ahb2apb_env_i", this);
+	
+	ahb2apb_env_i.ahbl_mst_agt_i.is_active = UVM_ACTIVE;
+	ahb2apb_env_i.apb_slv_agt_i.is_active = UVM_ACTIVE;
+	
+	if(!config_db#(virtual reset_if)::get(this, "", "vif", reset_if_i))
+		`uvm_fatal("No reset_if", "reset_if_i is not set!")
 endfunction
 
 //Main_Phase
