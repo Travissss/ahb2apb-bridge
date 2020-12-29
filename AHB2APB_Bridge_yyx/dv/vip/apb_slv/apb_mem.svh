@@ -16,7 +16,7 @@ class apb_mem #(DW = 32, AW = 32) extends uvm_object;
 
 	//Factory Registration
 	//
-	`uvm_object_utils(apb_mem)
+	`uvm_object_param_utils(apb_mem)
 	
 	//------------------------------------------
 	// Data Members
