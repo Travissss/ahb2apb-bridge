@@ -49,7 +49,7 @@ endclass
 //////////////////////////////////////////////////////////////////////////////////
 // 	-> sequence with burst state?
 //////////////////////////////////////////////////////////////////////////////////
-class ahbl_mst_burst_seq extends uvm_sequence #(ahbl_trans);
+class ahbl_mst_burst_seq extends ahbl_mst_basic_seq;
 
 	//Factory Registration
 	//
@@ -72,7 +72,7 @@ endclass
 //////////////////////////////////////////////////////////////////////////////////
 // 	-> single word read sequence
 //////////////////////////////////////////////////////////////////////////////////
-class ahbl_mst_single_read32_seq extends uvm_sequence #(ahbl_trans);
+class ahbl_mst_single_read32_seq extends ahbl_mst_basic_seq;
 
 	//Factory Registration
 	//
@@ -90,7 +90,7 @@ class ahbl_mst_single_read32_seq extends uvm_sequence #(ahbl_trans);
 		`uvm_do_with(req, {	hsel 	== 1'b1;
 							htrans 	== ahbl_mst_pkg::NSEQ;
 							hsize	== ahbl_mst_pkg::WORD;
-							hburst	== shbl_mst_pkg::SINGLE;
+							hburst	== ahbl_mst_pkg::SINGLE;
 							hwrite	== 1'b0;})
 	endtask
 		
@@ -100,7 +100,7 @@ endclass
 //////////////////////////////////////////////////////////////////////////////////
 // 	-> single word write sequence
 //////////////////////////////////////////////////////////////////////////////////
-class ahbl_mst_single_write32_seq extends uvm_sequence #(ahbl_trans);
+class ahbl_mst_single_write32_seq extends ahbl_mst_basic_seq;
 
 	//Factory Registration
 	//
