@@ -27,7 +27,7 @@ class ahb2apb_base_test extends uvm_test;
 	//------------------------------------------
 	// Sub Components
 	//------------------------------------------
-	ahb2apb_env	ahb2apb_env_i;
+	ahb2apb_env	env_i;
 	
 	//Factory Registration
 	//
@@ -54,20 +54,42 @@ endfunction
 //Build_Phase
 function void ahb2apb_base_test::build_phase(uvm_phase phase);
 	super.build_phase(phase);
-	ahb2apb_env_i = ahb2apb_env::type_id::create("ahb2apb_env_i", this);
+	env_i = ahb2apb_env::type_id::create("env_i", this);
 	
-	ahb2apb_env_i.ahbl_mst_agt_i.is_active = UVM_ACTIVE;
-	ahb2apb_env_i.apb_slv_agt_i.is_active = UVM_ACTIVE;
+	env_i.ahbl_mst_agt_i.is_active = UVM_ACTIVE;
+	env_i.apb_slv_agt_i.is_active = UVM_ACTIVE;
 	
 	if(!config_db#(virtual reset_if)::get(this, "", "vif", reset_if_i))
 		`uvm_fatal("No reset_if", "reset_if_i is not set!")
 endfunction
 
 //start_of_simulation_phase
-		
+function void ahb2apb_base_test::start_of_simulation_phase(uvm_ phase phase);
+	super.start_of_simulation_phase(phase);
+	uvm_top.print_topology();
+endfunction
+	
 //Main_Phase
 task ahb2apb_base_test::main_phase(uvm_phase phase);
-
+	reset_if_i.reset_dut;
+	
+	phase.phase_done.set_drain_time(this, 5us);
 endtask
 
+function void ahb2apb_base_test::report_phase(uvm_phase phase);
+	super.report_phase(phase);
+	if(num_uvm_errors == 0)begin
+		`uvm_info(get_type_name(), "Simulation Passed!", UVM_NONE)
+	end
+	else begin
+		`uvm_info(get_type_name(), "Simulation Failed!", UVM_NONE)
+	end
+endfunction
+
+function int ahb2apb_base_test::num_uvm_errors();
+	uvm_report_server server;
+	if(server == null)
+		server = get_report_server();
+	return server.get_severity_count(UVM_ERROR);
+endfunction
 `endif
