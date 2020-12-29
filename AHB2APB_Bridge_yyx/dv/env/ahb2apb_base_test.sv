@@ -63,6 +63,8 @@ function void ahb2apb_base_test::build_phase(uvm_phase phase);
 		`uvm_fatal("No reset_if", "reset_if_i is not set!")
 endfunction
 
+//start_of_simulation_phase
+		
 //Main_Phase
 task ahb2apb_base_test::main_phase(uvm_phase phase);
 
