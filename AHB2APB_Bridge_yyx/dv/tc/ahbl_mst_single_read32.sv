@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Yunxiao
+// Engineer: 		Travis
 // 
 // Create Date: 	12/29/2020 Tue 16:40
 // Filename: 		ahbl_mst_single_read32.sv
@@ -23,10 +23,6 @@ class ahbl_mst_single_read32 extends ahb2apb_base_test;
 	//Factory Registration
 	//
 	`uvm_component_utils(ahbl_mst_single_read32)
-	//------------------------------------------
-	// Constraints
-	//------------------------------------------
-
 	
 	//----------------------------------------------
 	// Methods
