@@ -14,7 +14,7 @@
 `ifndef AHB_MST_DRV_SV
 `define AHB_MST_DRV_SV
 
-class ahbl_mst_drv extends uvm_driver;
+class ahbl_mst_drv extends uvm_driver #(ahbl_trans);
 
 	//------------------------------------------
 	// Data, Interface, port  Members

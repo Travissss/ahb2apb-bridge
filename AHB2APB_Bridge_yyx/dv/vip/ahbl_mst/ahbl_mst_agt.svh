@@ -70,6 +70,7 @@ endfunction
 
 //Connect_phase
 function void ahbl_mst_agt::connect_phase(uvm_phase phase);
+	super.connect_phase(phase);
 	if(is_active == UVM_ACTIVE)
 		drv_i.seq_item_port.connect(sqr_i.seq_item_export);
 endfunction

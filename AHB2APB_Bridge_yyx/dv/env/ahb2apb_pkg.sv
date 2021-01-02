@@ -18,7 +18,7 @@ package ahb2apb_pkg;
 	import apb_slv_pkg::*;
 	
 	`include "func_cov.sv"
-	`include "ahb2apb_scb.sv"
+	`include "ahb2apb_scb.svh"
 	`include "ahb2apb_env.sv"
 
 

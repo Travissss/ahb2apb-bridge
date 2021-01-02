@@ -25,7 +25,7 @@ class func_cov extends uvm_object;
 												bins a6		= {16'hfffe};
 												bins a7		= {16'hfffd};
 												bins a8 	= {16'hfffc};
-												bins a9[4] 	= {16'h0004 : 16'hfffb};
+												bins a9[4] 	= {[16'h0004 : 16'hfffb]};
 												}
 		hwrite:	coverpoint ahb_pkt.hwrite;
 		hburst:	coverpoint ahb_pkt.hburst;
@@ -45,5 +45,3 @@ class func_cov extends uvm_object;
 	// User Defined Methods:
 	
 endclass
-
-`endif

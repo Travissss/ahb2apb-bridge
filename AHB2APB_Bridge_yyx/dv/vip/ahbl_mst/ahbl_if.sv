@@ -27,7 +27,8 @@ interface ahbl_if(input hclk, input hresetn);
 	
 	clocking mst_cb@(posedge hclk);
 		// default input #1 output #1;
-		output	hresetn;
+		input	hresetn;
+		
 		output	hsel;
 		output	haddr;
 		output	htrans;

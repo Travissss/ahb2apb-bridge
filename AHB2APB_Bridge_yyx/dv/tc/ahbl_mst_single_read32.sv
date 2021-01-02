@@ -44,7 +44,7 @@ endfunction
 function void ahbl_mst_single_read32::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	ahbl_mst_single_read32_seq_i = ahbl_mst_single_read32_seq::type_id::create("ahbl_mst_single_read32_seq_i");
-	apb_slv_rdy_seq_i = apb_slv_rdy_seq::type_id::create("apb_slv_rdy_seq_i")
+	apb_slv_rdy_seq_i = apb_slv_rdy_seq::type_id::create("apb_slv_rdy_seq_i");
 endfunction
 
 //Main_Phase
@@ -53,7 +53,7 @@ task ahbl_mst_single_read32::main_phase(uvm_phase phase);
 	
 	#100us;
 	ahbl_mst_single_read32_seq_i.start(env_i.ahbl_mst_agt_i.sqr_i);
-	apb_slv_rdy_seq_i.start(env_i.apb_slv_agt.sqr_i);
+	apb_slv_rdy_seq_i.start(env_i.apb_slv_agt_i.sqr_i);
 	
 	phase.drop_objection(this);
 endtask

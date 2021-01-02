@@ -24,7 +24,7 @@ class apb_slv_mon extends uvm_monitor;
 	//------------------------------------------
 	virtual apb_if		vif;
 
-	uvm_analysis_port 	ap;
+	uvm_analysis_port#(apb_trans) 	ap;
 
 	//----------------------------------------------
 	// Methods
@@ -46,7 +46,7 @@ endfunction
 function void apb_slv_mon::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	ap = new("ap", this);
-	if(!uvm_config_db #(virtual apb_if)::get("this","","vif",vif))
+	if(!uvm_config_db #(virtual apb_if)::get(this,"","vif",vif))
 		`uvm_fatal("No vif", "vif is not found")
 endfunction
 

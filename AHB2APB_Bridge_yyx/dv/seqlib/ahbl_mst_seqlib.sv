@@ -28,7 +28,7 @@ class ahbl_mst_basic_seq extends uvm_sequence #(ahbl_trans);
 	// Methods
 	// ---------------------------------------------
 	// Standard UVM Methods:	
-	function new(string name = "ahbl_mst_basic_seq")
+	function new(string name = "ahbl_mst_basic_seq");
 		super.new(name);
 	endfunction
 	
@@ -110,7 +110,7 @@ class ahbl_mst_single_write32_seq extends ahbl_mst_basic_seq;
 	// Methods
 	// ---------------------------------------------
 	// Standard UVM Methods:	
-	function new(string name = "ahbl_mst_single_write32_seq")
+	function new(string name = "ahbl_mst_single_write32_seq");
 		super.new(name);
 	endfunction
 	

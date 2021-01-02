@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // 	-> basic sequence
 //////////////////////////////////////////////////////////////////////////////////
-class apb_slv_basic_seq extends uvm_sequence #(ahbl_trans);
+class apb_slv_basic_seq extends uvm_sequence #(apb_trans);
 
 	//Factory Registration
 	//
@@ -64,7 +64,7 @@ class apb_slv_rdy_seq extends apb_slv_basic_seq;
 	endfunction
 	
 	virtual task body();
-		`uvm_do_with(req, {	slverr		== 1'b0;
+		`uvm_do_with(req, {	pslverr		== 1'b0;
 							nready_num 	== 0;})
 	endtask
 		
@@ -88,7 +88,7 @@ class apb_slv_nrdy_seq extends apb_slv_basic_seq;
 	endfunction
 	
 	virtual task body();
-		`uvm_do_with(req, {	slverr		== 1'b0;
+		`uvm_do_with(req, {	pslverr		== 1'b0;
 							nready_num 	inside {[1:5]};})
 	endtask
 		
@@ -113,7 +113,7 @@ class apb_slv_slverr_seq extends apb_slv_basic_seq;
 	endfunction
 	
 	virtual task body();
-		`uvm_do_with(req, {	slverr		== 1'b1;
+		`uvm_do_with(req, {	pslverr		== 1'b1;
 							nready_num 	inside {[1:5]};})
 	endtask
 		

@@ -11,10 +11,9 @@
 // 	-> test top include ahb2apb_env,
 //////////////////////////////////////////////////////////////////////////////////
 
-`ifndef APB_SLAVE_DRV_SV
-`define APB_SLAVE_DRV_SV
-
 import ahb2apb_pkg::*;
+		import uvm_pkg::*;
+		`include "uvm_macros.svh"
 class ahb2apb_base_test extends uvm_test;
 
 
@@ -47,7 +46,7 @@ class ahb2apb_base_test extends uvm_test;
 endclass
 
 //Constructor
-function void ahb2apb_base_test::new(string name = "ahb2apb_base_test", uvm_component parent)
+function ahb2apb_base_test::new(string name = "ahb2apb_base_test", uvm_component parent);
 	super.new(name, parent);
 endfunction
 
@@ -59,12 +58,12 @@ function void ahb2apb_base_test::build_phase(uvm_phase phase);
 	env_i.ahbl_mst_agt_i.is_active = UVM_ACTIVE;
 	env_i.apb_slv_agt_i.is_active = UVM_ACTIVE;
 	
-	if(!config_db#(virtual reset_if)::get(this, "", "vif", reset_if_i))
+	if(!uvm_config_db#(virtual reset_if)::get(this, "", "vif", reset_if_i))
 		`uvm_fatal("No reset_if", "reset_if_i is not set!")
 endfunction
 
 //start_of_simulation_phase
-function void ahb2apb_base_test::start_of_simulation_phase(uvm_ phase phase);
+function void ahb2apb_base_test::start_of_simulation_phase(uvm_phase phase);
 	super.start_of_simulation_phase(phase);
 	uvm_top.print_topology();
 endfunction
@@ -92,4 +91,3 @@ function int ahb2apb_base_test::num_uvm_errors();
 		server = get_report_server();
 	return server.get_severity_count(UVM_ERROR);
 endfunction
-`endif

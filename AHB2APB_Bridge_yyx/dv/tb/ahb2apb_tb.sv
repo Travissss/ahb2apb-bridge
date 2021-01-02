@@ -62,7 +62,7 @@ module ahb2apb_tb();
 	//generate pclken for pclk
 	always@(posedge hclk or negedge hresetn)
 	begin
-		if(!resetn)
+		if(!hresetn)
 			hclk_cnt <= 4'b0;
 		else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
 			hclk_cnt <= 4'b0;
@@ -72,7 +72,7 @@ module ahb2apb_tb();
 	
 	always@(negedge hclk or negedge hresetn)
 	begin
-		if(!resetn)
+		if(!presetn)
 			pclk_en <= 1'b0;
 		else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
 			pclk_en <= 1'b1;
@@ -101,7 +101,7 @@ module ahb2apb_tb();
 			.HADDR		( ahbl_if_i.haddr[15:0]	),   
 			.HTRANS		( ahbl_if_i.htrans		),  
 			.HSIZE		( ahbl_if_i.hsize		),   
-			.HPROT		( ahbl_if_i.hburst		),	   
+			.HPROT		( ahbl_if_i.hprot		),	   
 			.HWRITE		( ahbl_if_i.hwrite		),  
 			.HREADY		( ahbl_if_i.hready		),  
 			.HWDATA		( ahbl_if_i.hwdata		),  
@@ -113,8 +113,8 @@ module ahb2apb_tb();
 /*output*/	.PADDR		( apb_if_i.paddr[15:0]	),   
 /*output*/	.PENABLE	( apb_if_i.penable		), 
 /*output*/	.PWRITE		( apb_if_i.pwrite		),  
-/*output*/	.PSTRB		( apb_if_i.psrtb		),   
-/*output*/	.PPROT		( apb_if_i.prot			),   
+/*output*/	.PSTRB		( apb_if_i.pstrb		),   
+/*output*/	.PPROT		( apb_if_i.pprot		),   
 /*output*/	.PWDATA		( apb_if_i.pwdata		),  
 /*output*/	.PSEL		( apb_if_i.psel			),    
 						  
@@ -122,15 +122,15 @@ module ahb2apb_tb();
 						  
 			.PRDATA		( apb_if_i.prdata		),  
 			.PREADY		( apb_if_i.pready		),  
-			.PSLVERR	( apb_if_i.pslverr		),
+			.PSLVERR	( apb_if_i.pslverr		)
 	);
 	
 	
 	assign apb_if_i.paddr[31:16] = 16'b0;
 	
 	initial begin
-		uvm_config_db#(virtual ahbl_if)::set(null, "uvm_test_top.env.ahbl_mst_agt_i", "vif", ahbl_if_i);
-		uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env.apb_slv_agt_i", "vif", apb_if_i);
+		uvm_config_db#(virtual ahbl_if)::set(null, "uvm_test_top.env_i.ahbl_mst_agt_i", "vif", ahbl_if_i);
+		uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env_i.apb_slv_agt_i", "vif", apb_if_i);
 		uvm_config_db#(virtual reset_if)::set(null, "uvm_test_top", "vif", reset_if_i);
 		run_test();
 	end

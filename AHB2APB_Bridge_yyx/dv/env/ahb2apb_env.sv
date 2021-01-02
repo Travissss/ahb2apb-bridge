@@ -11,8 +11,8 @@
 // 	-> Environment contains ahb_agt apb_agt and scoreboard
 //////////////////////////////////////////////////////////////////////////////////
 
-`ifndef AHB2APB_SCB_SV
-`define AHB2APB_SCB_SV
+`ifndef AHB2APB_ENV_SV
+`define AHB2APB_ENV_SV
 
 class ahb2apb_env extends uvm_env;
 
@@ -44,7 +44,7 @@ class ahb2apb_env extends uvm_env;
 endclass
 
 //Constructor
-function void ahb2apb_env::new(string name = "ahb2apb_env", uvm_component parent)
+function ahb2apb_env::new(string name = "ahb2apb_env", uvm_component parent);
 	super.new(name, parent);
 endfunction
 
@@ -54,6 +54,9 @@ function void ahb2apb_env::build_phase(uvm_phase phase);
 	ahbl_mst_agt_i	= ahbl_mst_agt::type_id::create("ahbl_mst_agt_i", this);
 	apb_slv_agt_i	= apb_slv_agt::type_id::create("apb_slv_agt_i", this);
 	ahb2apb_scb_i	= ahb2apb_scb::type_id::create("ahb2apb_scb_i", this);
+	ahbl_fifo	= new("ahbl_fifo", this);
+	apb_fifo	= new("apb_fifo", this);
+	
 endfunction
 
 //

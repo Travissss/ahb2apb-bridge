@@ -68,7 +68,7 @@ function void apb_slv_agt::connect_phase(uvm_phase phase);
 	if(is_active == UVM_ACTIVE) begin
 		drv_i.seq_item_port.connect(sqr_i.seq_item_export);
 	end
-		this.ap = mon_i.ap;
+//		this.ap = mon_i.ap;		can not assign? if assign suc, need to change port connect relationship in ahb2apb_env;
 endfunction
 //Main_Phase
 task apb_slv_agt::main_phase(uvm_phase phase);

@@ -21,7 +21,7 @@ class ahb2apb_scb extends uvm_scoreboard;
 	uvm_blocking_get_port #(apb_trans) 	apb_port;
 	uvm_blocking_get_port #(ahbl_trans)	ahbl_port;
 	
-	func_cov	fcov
+	func_cov	fcov;
 
 	//Factory Registration
 	//
@@ -39,7 +39,7 @@ class ahb2apb_scb extends uvm_scoreboard;
 endclass
 
 //Constructor
-function void ahb2apb_scb::new(string name = "ahb2apb_scb", uvm_component parent)
+function ahb2apb_scb::new(string name = "ahb2apb_scb", uvm_component parent);
 	super.new(name, parent);
 endfunction
 
@@ -124,13 +124,13 @@ task ahb2apb_scb::check_pkt();
 		//check hsize and pstrb when it is a write access
 		//------------------------------------------
 		if((ahbl_pkt.hsize == WORD) & (apb_pkt.pstrb != 4'b1111))begin
-			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:WORD, apb-pstrb:%4b"), apb_pkt.strb)
+			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:WORD, apb-pstrb:%4b", apb_pkt.pstrb))
 			err_flag = 1;
 		end
 		
 		if(	((ahbl_pkt.hsize == HWORD) & !ahbl_pkt.haddr[1] & (apb_pkt.pstrb != 4'b0011)) 
 			| ((ahbl_pkt.hsize == HWORD) & ahbl_pkt.haddr[1] & (apb_pkt.pstrb != 4'b1100)))begin
-			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:HWORD, ahbl-addr[1]:%d, apb-pstrb:%4b"), ahbl_pkt.haddr[1], apb_pkt.strb)
+			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:HWORD, ahbl-addr[1]:%d, apb-pstrb:%4b", ahbl_pkt.haddr[1], apb_pkt.pstrb))
 			err_flag = 1;
 		end
 		
@@ -138,19 +138,19 @@ task ahb2apb_scb::check_pkt();
 			| ((ahbl_pkt.hsize == BYTE) & (ahbl_pkt.haddr[1:0] == 2'b01) & (apb_pkt.pstrb != 4'b0010))
 			| ((ahbl_pkt.hsize == BYTE) & (ahbl_pkt.haddr[1:0] == 2'b10) & (apb_pkt.pstrb != 4'b0100))
 			| ((ahbl_pkt.hsize == BYTE) & (ahbl_pkt.haddr[1:0] == 2'b11) & (apb_pkt.pstrb != 4'b1000)))begin
-			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:BYTE, ahbl-addr[1:0]:%d, apb-pstrb:%4b"), ahbl_pkt.haddr[1], apb_pkt.strb)
+			`uvm_error(get_type_name(), $sformatf("hsize/haddr/pstrb mismatch! ahbl-size:BYTE, ahbl-addr[1:0]:%d, apb-pstrb:%4b", ahbl_pkt.haddr[1], apb_pkt.pstrb))
 			err_flag = 1;
 		end
 		//------------------------------------------
 		//check  hresp and pslverr
 		//------------------------------------------
-		if(ahbl_pkt.hresp != apb_pkt.slverr) begin
-			`uvm_error(get_type_name(), $sformatf("hresp/pslverr mismatch hresp:[%0h], pslverr:[%0h]", ahbl_pkt.hresp， apb_pkt.pslverr ))
+		if(ahbl_pkt.hresp != apb_pkt.pslverr) begin
+			`uvm_error(get_type_name(), $sformatf("hresp/pslverr mismatch hresp:[%0h], pslverr:[%0h]", ahbl_pkt.hresp, apb_pkt.pslverr ))
 			err_flag = 1;
 		end
 		
-		if(ahbl_pkt.hresp != apb_pkt.slverr) begin
-			`uvm_error(get_type_name(), $sformatf("hresp/pslverr mismatch hresp:[%0h], pslverr:[%0h]", ahbl_pkt.hresp， apb_pkt.pslverr ))
+		if(ahbl_pkt.hresp != apb_pkt.pslverr) begin
+			`uvm_error(get_type_name(), $sformatf("hresp/pslverr mismatch hresp:[%0h], pslverr:[%0h]", ahbl_pkt.hresp, apb_pkt.pslverr ))
 			err_flag = 1;
 		end
 		//final-display if correct
@@ -161,5 +161,4 @@ task ahb2apb_scb::check_pkt();
 		#20ns;
 	end
 
-endtask:ahb2apb_scb
-`endif
+endtask:check_pkt

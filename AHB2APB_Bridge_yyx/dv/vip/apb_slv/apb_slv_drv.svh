@@ -15,7 +15,7 @@
 `ifndef APB_SLAVE_DRV_SV
 `define APB_SLAVE_DRV_SV
 
-class apb_slv_drv extends uvm_driver;
+class apb_slv_drv extends uvm_driver#(apb_trans);
 
 
 	
@@ -86,7 +86,7 @@ task apb_slv_drv::drive_one_pkt(apb_trans pkt);
 		if(!pkt.pslverr)
 			mem.put_data(vif.slv_cb.paddr, vif.slv_cb.pwdata);
 	else
-		if(!vif.slv_cb.pslverr)
+		if(!pkt.pslverr)
 			vif.slv_cb.prdata <= mem.get_data(vif.slv_cb.paddr);
 		else
 			vif.slv_cb.prdata <= 32'hffff_ffff;
