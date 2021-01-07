@@ -30,69 +30,69 @@ module ahb2apb_tb();
 	reg				pclk_en_r;
 	wire 			apb_active;
 
-	//Interfaces;
-	ahbl_if		ahbl_if_i(hclk, hresetn);
-	apb_if		apb_if_i(pclk, presetn);
-	reset_if	reset_if_i(hclk);
+//Interfaces;
+ahbl_if		ahbl_if_i(hclk, hresetn);
+apb_if		apb_if_i(pclk, presetn);
+reset_if	reset_if_i(hclk);
 
-	//generate HCLK_PCLK_RATIO randomly;
-	initial begin
-		tmp_var = $urandom_range(0, 3);
-		case(tmp_var)
-			0:HCLK_PCLK_RATIO = 1;
-			1:HCLK_PCLK_RATIO = 2;
-			2:HCLK_PCLK_RATIO = 4;
-			3:HCLK_PCLK_RATIO = 8;
-		endcase
-	end
+//generate HCLK_PCLK_RATIO randomly;
+initial begin
+	tmp_var = $urandom_range(0, 3);
+	case(tmp_var)
+		0:HCLK_PCLK_RATIO = 1;
+		1:HCLK_PCLK_RATIO = 2;
+		2:HCLK_PCLK_RATIO = 4;
+		3:HCLK_PCLK_RATIO = 8;
+	endcase
+end
 
-	//generate hclk with HCLK_PERIOD/2;
-	initial begin
-		hclk = 1'b0;
-		forever begin
-			#(HCLK_PERIOD/2);
-			hclk = ~hclk;
-		end
+//generate hclk with HCLK_PERIOD/2;
+initial begin
+	hclk = 1'b0;
+	forever begin
+		#(HCLK_PERIOD/2);
+		hclk = ~hclk;
 	end
-	
-	//generate hresetn, presetn;
-	assign hresetn = ~reset_if_i.reset;
-	assign presetn = hresetn;
-	
-	//generate pclken for pclk
-	always@(posedge hclk or negedge hresetn)
-	begin
-		if(!hresetn)
-			hclk_cnt <= 4'b0;
-		else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
-			hclk_cnt <= 4'b0;
-		else 
-			hclk_cnt <= hclk_cnt + 1'b1;
-	end
-	
-	always@(negedge hclk or negedge hresetn)
-	begin
-		if(!presetn)
-			pclk_en <= 1'b0;
-		else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
-			pclk_en <= 1'b1;
-		else 
-			pclk_en <= 1'b0;
-	end
-	
-	always@(*) begin
-		#1ns;
-		pclk_en_r = pclk_en;
-	end
+end
 
-	//generate pclk	
-	assign pclk = pclk_en_r & hclk;
+//generate hresetn, presetn;
+assign hresetn = ~reset_if_i.reset;
+assign presetn = hresetn;
+
+//generate pclken for pclk
+always@(posedge hclk or negedge hresetn)
+begin
+	if(!hresetn)
+		hclk_cnt <= 4'b0;
+	else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
+		hclk_cnt <= 4'b0;
+	else 
+		hclk_cnt <= hclk_cnt + 1'b1;
+end
+
+always@(negedge hclk or negedge hresetn)
+begin
+	if(!presetn)
+		pclk_en <= 1'b0;
+	else if(hclk_cnt == HCLK_PCLK_RATIO - 1'b1)
+		pclk_en <= 1'b1;
+	else 
+		pclk_en <= 1'b0;
+end
+
+always@(*) begin
+	#1ns;
+	pclk_en_r = pclk_en;
+end
+
+//generate pclk	
+assign pclk = pclk_en_r & hclk;
 	
-	cmsdk_ahb_to_apb #(
-		.ADDRWIDTH		(16),
-		.REGISTER_DATA	(1),
-		.REGISTER_WDATA	(0)
-	) DUT (
+cmsdk_ahb_to_apb #(
+	.ADDRWIDTH		(16),
+	.REGISTER_DATA	(1),
+	.REGISTER_WDATA	(0)
+) DUT (
 			.HCLK		( hclk					),    
 			.HRESETn	( hresetn				), 
 			.PCLKEN		( pclk_en				),  
@@ -123,32 +123,39 @@ module ahb2apb_tb();
 			.PRDATA		( apb_if_i.prdata		),  
 			.PREADY		( apb_if_i.pready		),  
 			.PSLVERR	( apb_if_i.pslverr		)
-	);
+);
 	
 	
-	assign apb_if_i.paddr[31:16] = 16'b0;
+assign apb_if_i.paddr[31:16] = 16'b0;
+
+initial begin
+	uvm_config_db#(virtual ahbl_if)::set(null, "uvm_test_top.env_i.ahbl_mst_agt_i", "vif", ahbl_if_i);
+	uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env_i.apb_slv_agt_i", "vif", apb_if_i);
+	uvm_config_db#(virtual reset_if)::set(null, "uvm_test_top", "vif", reset_if_i);
+	run_test();
+end
+
+//----------------------------------------------
+// covergroups
+// ---------------------------------------------
+
+covergroup cg_clk_ratio();
+	option.per_instance = 1;
+	option.name = "cg_clk_ratio";
 	
-	initial begin
-		uvm_config_db#(virtual ahbl_if)::set(null, "uvm_test_top.env_i.ahbl_mst_agt_i", "vif", ahbl_if_i);
-		uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env_i.apb_slv_agt_i", "vif", apb_if_i);
-		uvm_config_db#(virtual reset_if)::set(null, "uvm_test_top", "vif", reset_if_i);
-		run_test();
-	end
-	
-	//----------------------------------------------
-	// covergroups
-	// ---------------------------------------------
-	
-	covergroup cg_clk_ratio();
-		option.per_instance = 1;
-		option.name = "cg_clk_ratio";
-		
-		clk_ratio: coverpoint HCLK_PCLK_RATIO;
-	endgroup
-	
-	cg_clk_ratio cg_clk_ratio_i = new();
-	
-	always@(posedge hresetn) 
-		cg_clk_ratio_i.sample();
-	
+	clk_ratio: coverpoint HCLK_PCLK_RATIO;
+endgroup
+
+cg_clk_ratio cg_clk_ratio_i = new();
+
+always@(posedge hresetn) 
+	cg_clk_ratio_i.sample();
+
+
+//`ifdef  DUMP_FSDB
+initial begin
+	$fsdbDumpfile("ahb2apb.fsdb");
+	$fsdbDumpvars;
+end
+//`endif
 endmodule

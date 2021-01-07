@@ -55,9 +55,15 @@ function void apb_slv_agt::build_phase(uvm_phase phase);
 	ap = new("ap", this);
 	if(!uvm_config_db#(virtual apb_if)::get(this, "", "vif", vif))
 		`uvm_fatal("NO vif", " vif is not found")
+	
+	uvm_config_db#(virtual apb_if)::set(this, "mon_i", "vif", vif);
+	if(!uvm_config_db#(uvm_active_passive_enum)::get(this, "", "is_active", is_active))
+		`uvm_fatal("apb_slv_agt", "No is_active")
+	
 	if(is_active == UVM_ACTIVE) begin
 		sqr_i = apb_slv_sqr::type_id::create("sqr_i", this);
 		drv_i = apb_slv_drv::type_id::create("drv_i", this);
+		uvm_config_db#(virtual apb_if)::set(this, "drv_i", "vif", vif);
 	end
 		mon_i = apb_slv_mon::type_id::create("mon_i", this);
 endfunction

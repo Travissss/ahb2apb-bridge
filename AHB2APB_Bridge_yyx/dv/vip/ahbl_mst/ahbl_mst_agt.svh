@@ -59,7 +59,8 @@ function void ahbl_mst_agt::build_phase(uvm_phase phase);
 
 	mon_i = ahbl_mst_mon::type_id::create("mon_i", this);
 	uvm_config_db#(virtual ahbl_if)::set(this, "mon_i", "vif", vif);
-	
+	if(!uvm_config_db#(uvm_active_passive_enum)::get(this, "", "is_active", is_active))
+		`uvm_fatal("ahbl_mst_agt", "No is_active")
 	if(is_active == UVM_ACTIVE) begin
 		drv_i = ahbl_mst_drv::type_id::create("drv_i", this);
 		sqr_i = ahbl_mst_sqr::type_id::create("sqr_i", this);

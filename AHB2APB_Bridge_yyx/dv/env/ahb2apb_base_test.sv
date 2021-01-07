@@ -12,8 +12,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 import ahb2apb_pkg::*;
-		import uvm_pkg::*;
-		`include "uvm_macros.svh"
+import uvm_pkg::*;
+`include "uvm_macros.svh"
 class ahb2apb_base_test extends uvm_test;
 
 
@@ -54,10 +54,9 @@ endfunction
 function void ahb2apb_base_test::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	env_i = ahb2apb_env::type_id::create("env_i", this);
-	
-	env_i.ahbl_mst_agt_i.is_active = UVM_ACTIVE;
-	env_i.apb_slv_agt_i.is_active = UVM_ACTIVE;
-	
+
+	uvm_config_db#(uvm_active_passive_enum)::set(this,"env_i.ahbl_mst_agt_i", "is_active", UVM_ACTIVE);
+	uvm_config_db#(uvm_active_passive_enum)::set(this,"env_i.apb_slv_agt_i", "is_active", UVM_ACTIVE);
 	if(!uvm_config_db#(virtual reset_if)::get(this, "", "vif", reset_if_i))
 		`uvm_fatal("No reset_if", "reset_if_i is not set!")
 endfunction
