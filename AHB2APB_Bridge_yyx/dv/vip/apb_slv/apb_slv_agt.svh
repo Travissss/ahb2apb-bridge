@@ -56,7 +56,7 @@ function void apb_slv_agt::build_phase(uvm_phase phase);
 	if(!uvm_config_db#(virtual apb_if)::get(this, "", "vif", vif))
 		`uvm_fatal("NO vif", " vif is not found")
 	
-	uvm_config_db#(virtual apb_if)::set(this, "mon_i", "vif", vif);
+
 	if(!uvm_config_db#(uvm_active_passive_enum)::get(this, "", "is_active", is_active))
 		`uvm_fatal("apb_slv_agt", "No is_active")
 	
@@ -65,7 +65,9 @@ function void apb_slv_agt::build_phase(uvm_phase phase);
 		drv_i = apb_slv_drv::type_id::create("drv_i", this);
 		uvm_config_db#(virtual apb_if)::set(this, "drv_i", "vif", vif);
 	end
+		
 		mon_i = apb_slv_mon::type_id::create("mon_i", this);
+		uvm_config_db#(virtual apb_if)::set(this, "mon_i", "vif", vif);
 endfunction
 
 //Connect_Phase

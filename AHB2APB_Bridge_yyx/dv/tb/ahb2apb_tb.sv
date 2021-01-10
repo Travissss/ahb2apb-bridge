@@ -152,10 +152,10 @@ always@(posedge hresetn)
 	cg_clk_ratio_i.sample();
 
 
-//`ifdef  DUMP_FSDB
+`ifdef  DUMP_FSDB
 initial begin
-	$fsdbDumpfile("ahb2apb.fsdb");
+	$fsdbDumpfile("ahb2apb_bridge.fsdb");
 	$fsdbDumpvars;
 end
-//`endif
+`endif
 endmodule

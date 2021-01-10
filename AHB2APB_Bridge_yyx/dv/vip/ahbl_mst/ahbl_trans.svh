@@ -14,7 +14,7 @@ class ahbl_trans extends uvm_sequence_item;
 	rand logic 		[31:0] 	haddr = 32'b0;
 	rand htrans_t 			htrans = NSEQ;
 	rand hsize_t			hsize = BYTE;
-	rand hburst_t			hburst = SINGLE;
+	rand hburst_t			hburst = WRAP4;
 	rand logic		[3:0]	hprot = 4'b0;
 	rand logic				hwrite = 1'b0;
 	rand logic		[31:0]	hrwdata = 32'b0;
@@ -82,7 +82,7 @@ class ahbl_trans extends uvm_sequence_item;
 		(hburst == INCR4 ) -> (bst_beats == 4);
 		(hburst == INCR8 ) -> (bst_beats == 8);
 		(hburst == INCR16) -> (bst_beats == 16);
-		solve htrans before hburst;
+		solve hburst before bst_beats;
 	}
 	
 	constraint queue_constr{

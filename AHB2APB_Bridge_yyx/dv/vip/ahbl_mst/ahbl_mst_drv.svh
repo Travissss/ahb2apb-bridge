@@ -106,7 +106,7 @@ task ahbl_mst_drv::drive_lcyc_pkt_apha(ref ahbl_trans pkt);
 	if((vif.mst_cb.hready)) begin
 		vif.mst_cb.hsel 	<= pkt.hsel;
 		vif.mst_cb.haddr 	<= ((pkt.htrans != IDLE)&(pkt.htrans != BUSY)) ? pkt.nxt_haddr() : vif.haddr;
-		vif.mst_cb.htrans	<= pkt.htrans;
+		vif.mst_cb.htrans	<= pkt.nxt_htrans();
 		vif.mst_cb.hsize	<= pkt.hsize;
 		vif.mst_cb.hburst	<= pkt.hburst;
 		vif.mst_cb.hprot	<= pkt.hprot;

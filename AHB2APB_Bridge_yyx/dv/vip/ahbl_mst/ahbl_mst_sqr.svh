@@ -24,6 +24,7 @@ class ahbl_mst_sqr extends uvm_sequencer #(ahbl_trans);
 	// ---------------------------------------------
 	// Standard UVM Methods:	
 	extern function new(string name = "ahbl_mst_sqr", uvm_component parent);
+	extern virtual function void build_phase(uvm_phase phase);
 	// User Defined Methods:
 
 
@@ -32,6 +33,10 @@ endclass
 //Constructor
 function ahbl_mst_sqr::new(string name = "ahbl_mst_sqr", uvm_component parent);
 	super.new(name, parent);
+endfunction
+
+function void ahbl_mst_sqr::build_phase(uvm_phase phase);
+	super.build_phase(phase);
 endfunction
 
 `endif

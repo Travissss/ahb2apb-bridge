@@ -22,7 +22,7 @@
 									NSEQ = 2'b10,
 									SEQ	 = 2'b11} htrans_t;
 		typedef enum logic [2:0] {	SINGLE 	= 3'b000,
-									INCE	= 3'b001,
+									INCR	= 3'b001,
 									WRAP4	= 3'b010,
 									INCR4	= 3'b011,
 									WRAP8	= 3'b100,
