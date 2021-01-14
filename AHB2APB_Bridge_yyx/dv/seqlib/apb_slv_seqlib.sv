@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 class apb_slv_basic_seq extends uvm_sequence #(apb_trans);
 
+	apb_trans req;
 	//Factory Registration
 	//
 	`uvm_object_utils(apb_slv_basic_seq)

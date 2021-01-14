@@ -90,7 +90,7 @@ assign pclk = pclk_en_r & hclk;
 	
 cmsdk_ahb_to_apb #(
 	.ADDRWIDTH		(16),
-	.REGISTER_DATA	(1),
+	.REGISTER_RDATA	(1),
 	.REGISTER_WDATA	(0)
 ) DUT (
 			.HCLK		( hclk					),    

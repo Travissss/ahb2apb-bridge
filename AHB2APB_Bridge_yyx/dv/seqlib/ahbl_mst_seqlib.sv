@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 class ahbl_mst_basic_seq extends uvm_sequence #(ahbl_trans);
 
+	ahbl_trans req;
 	//Factory Registration
 	//
 	`uvm_object_utils(ahbl_mst_basic_seq)

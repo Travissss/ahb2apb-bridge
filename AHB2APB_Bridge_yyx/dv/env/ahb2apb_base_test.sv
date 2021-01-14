@@ -71,7 +71,7 @@ endfunction
 task ahb2apb_base_test::main_phase(uvm_phase phase);
 	reset_if_i.reset_dut;
 	
-	phase.phase_done.set_drain_time(this, 5us);
+	phase.phase_done.set_drain_time(this, 15us);
 endtask
 
 function void ahb2apb_base_test::report_phase(uvm_phase phase);

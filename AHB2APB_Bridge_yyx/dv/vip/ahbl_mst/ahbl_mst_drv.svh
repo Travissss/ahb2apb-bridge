@@ -67,7 +67,9 @@ task ahbl_mst_drv::main_phase(uvm_phase phase);
 			vif.mst_cb.hburst	<= SINGLE;
 			vif.mst_cb.hprot	<= 4'b0;
 			vif.mst_cb.hwrite	<= 1'b0;
-			vif.mst_cb.hwdata	<= 32'b0;
+			vif.mst_cb.hwdata	<= 32'b0;					
+			pkt_dpha = null;
+			pkt_apha = null;
 		end
 		else begin
 			//transfer data
