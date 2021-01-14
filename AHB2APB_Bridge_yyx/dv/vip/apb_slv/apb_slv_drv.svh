@@ -89,6 +89,6 @@ task apb_slv_drv::drive_one_pkt(apb_trans pkt);
 		if(!pkt.pslverr)
 			vif.slv_cb.prdata <= mem.get_data(vif.slv_cb.paddr);
 		else
-			vif.slv_cb.prdata <= 32'hffff_ffff;
+			vif.slv_cb.prdata <= pkt.prdata;
 endtask
 `endif

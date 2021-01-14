@@ -26,7 +26,7 @@ class ahbl_mst_burst extends ahb2apb_base_test;
 	
 	//----------------------------------------------
 	// Methods
-	// ---------------------------------------------
+	//----------------------------------------------
 	// Standard UVM Methods:	
 	extern function new(string name = "ahbl_mst_burst", uvm_component parent);
 	extern virtual function void build_phase(uvm_phase phase);

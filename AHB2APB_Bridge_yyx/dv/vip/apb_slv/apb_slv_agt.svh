@@ -39,7 +39,6 @@ class apb_slv_agt extends uvm_agent;
 	extern function new(string name = "apb_slv_agt", uvm_component parent);
 	extern virtual function void build_phase(uvm_phase phase);
 	extern virtual function void connect_phase(uvm_phase phase);
-	extern virtual task main_phase(uvm_phase phase);
 	// User Defined Methods:
 	
 endclass
@@ -78,9 +77,6 @@ function void apb_slv_agt::connect_phase(uvm_phase phase);
 	end
 //		this.ap = mon_i.ap;		can not assign? if assign suc, need to change port connect relationship in ahb2apb_env;
 endfunction
-//Main_Phase
-task apb_slv_agt::main_phase(uvm_phase phase);
-	
-endtask
+
 
 `endif
