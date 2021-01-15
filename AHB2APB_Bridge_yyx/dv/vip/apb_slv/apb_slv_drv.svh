@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Travis
+// Engineer: 		Yunxiao
 // 
 // Create Date: 	11/13/2020
 // Filename: 		apb_slv_drv.svh
@@ -82,13 +82,15 @@ task apb_slv_drv::drive_one_pkt(apb_trans pkt);
 	end
 	vif.slv_cb.pready <= 1'b1;
 	vif.slv_cb.pslverr <= pkt.pslverr;
-	if(vif.slv_cb.pwrite)
+	if(vif.slv_cb.pwrite) begin
 		if(!pkt.pslverr)
 			mem.put_data(vif.slv_cb.paddr, vif.slv_cb.pwdata);
-	else
+	end
+	else begin
 		if(!pkt.pslverr)
 			vif.slv_cb.prdata <= mem.get_data(vif.slv_cb.paddr);
 		else
 			vif.slv_cb.prdata <= pkt.prdata;
+	end
 endtask
 `endif
