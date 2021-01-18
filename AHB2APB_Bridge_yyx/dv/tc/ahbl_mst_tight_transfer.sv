@@ -66,7 +66,7 @@ task ahbl_mst_tight_transfer::main_phase(uvm_phase phase);
 				apb_slv_nrdy_seq_i.start(env_i.apb_slv_agt_i.sqr_i);
 				num_apb_seq++;
 				if(num_apb_seq >= ahbl_mst_burst_seq_0.req.get_bst_beats()) begin
-					//num_apb_seq = 0;
+					num_apb_seq = 0;
 					break;
 				end
 			end

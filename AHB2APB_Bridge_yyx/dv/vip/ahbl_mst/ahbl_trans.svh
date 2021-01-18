@@ -108,8 +108,8 @@ class ahbl_trans extends uvm_sequence_item;
 		htrans_q[0]		= NSEQ;
 		hrwdata_q[0] 	= hrwdata;
 		for (i = 1; i < bst_beats; i++) begin
-			haddr_q[i] 	= haddr[i-1] + (2**hsize);
-			htrans_q[i]	= NSEQ; 
+			haddr_q[i] 	= haddr_q[i-1] + (2**hsize);
+			htrans_q[i]	= SEQ; 
 		end
 	endfunction
 	
@@ -127,6 +127,11 @@ class ahbl_trans extends uvm_sequence_item;
 	virtual function logic [31:0] nxt_htrans();
 		htrans_idx++;
 		return htrans_q[htrans_idx - 1];
+	endfunction	
+	
+	virtual function logic [31:0] htrans_ro();
+		htrans_ro = htrans_q[htrans_idx];
+		return htrans_ro;
 	endfunction	
 	
 	virtual function bit last_beat();

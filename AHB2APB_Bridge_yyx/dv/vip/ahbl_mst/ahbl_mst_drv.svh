@@ -91,9 +91,12 @@ task ahbl_mst_drv::main_phase(uvm_phase phase);
 				if(pkt_apha != null) begin
 					drive_lcyc_pkt_apha(pkt_apha);
 					pkt_apha.print();
+					`uvm_info(get_type_name(), "ahbl_mst_drv successfully get a new AddressPhase pkt", UVM_LOW)
 				end	
-				else
+				else begin
 					drive_lcyc_pkt_idle();
+					//`uvm_info(get_type_name(), "ahbl_mst_drv didn't get a new AddressPhase pkt", UVM_LOW)
+				end
 			end
 		end
 	end
@@ -107,7 +110,7 @@ endtask
 task ahbl_mst_drv::drive_lcyc_pkt_apha(ref ahbl_trans pkt);
 	if((vif.mst_cb.hready)) begin
 		vif.mst_cb.hsel 	<= pkt.hsel;
-		vif.mst_cb.haddr 	<= ((pkt.htrans != IDLE)&(pkt.htrans != BUSY)) ? pkt.nxt_haddr() : vif.haddr;
+		vif.mst_cb.haddr 	<= ((pkt.htrans_ro() != IDLE)&(pkt.htrans_ro() != BUSY)) ? pkt.nxt_haddr() : vif.haddr;
 		vif.mst_cb.htrans	<= pkt.nxt_htrans();
 		vif.mst_cb.hsize	<= pkt.hsize;
 		vif.mst_cb.hburst	<= pkt.hburst;

@@ -110,13 +110,13 @@ task ahb2apb_scb::check_pkt();
 					
 		//user or priviledged
 		if(ahbl_pkt.hprot[1] != apb_pkt.pprot[0]) begin
-			`uvm_error(get_type_name(), $sformatf("hprot/pprot mismatch ahbl[1]:[%0h] ,apb[0]:[%0h] ", ahbl_pkt.hprot[1], apb_pkt.pprot[0] ))
+			`uvm_error(get_type_name(), $sformatf("hprot/pprot mismatch ahbl[1] =%0h ,apb[0] = %0h ", ahbl_pkt.hprot[1], apb_pkt.pprot[0] ))
 			err_flag = 1;
 		end
 
 		//secure or non-secure
-		if(ahbl_pkt.hprot[0] != apb_pkt.pprot[2]) begin
-			`uvm_error(get_type_name(), $sformatf("hprot/pprot mismatch ahbl[0]:[%0h], apb[2]:[%0h] ",  ahbl_pkt.hprot[0], apb_pkt.pprot[2]))
+		if(ahbl_pkt.hprot[0] == apb_pkt.pprot[2]) begin                     
+			`uvm_error(get_type_name(), $sformatf("hprot/pprot mismatch ahbl[0] = %0h , apb[2] = %0h ",  ahbl_pkt.hprot[0], apb_pkt.pprot[2]))
 			err_flag = 1;
 		end
 		
