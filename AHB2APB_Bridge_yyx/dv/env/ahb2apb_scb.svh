@@ -78,12 +78,16 @@ task ahb2apb_scb::check_pkt();
 		//------------------------------------------
 		//Check data:
 		//------------------------------------------
-		
-		if(ahbl_pkt.hrwdata != apb_pkt.data) begin
-			`uvm_error(get_type_name(), $sformatf("data mismatch! ahb-data[%0h], apb-data[15:2][%0h]",ahbl_pkt.hrwdata, apb_pkt.data))
-			err_flag = 1;
-		end
-		
+		if(ahbl_pkt.hwrite)
+			if(ahbl_pkt.hrwdata != apb_pkt.data) begin
+				`uvm_error(get_type_name(), $sformatf("write data mismatch! ahb-data = %0h, apb-data = %0h",ahbl_pkt.hrwdata, apb_pkt.data))
+				err_flag = 1;
+			end
+		else if(!ahbl_pkt.hwrite)
+			if(ahbl_pkt.hrwdata != apb_pkt.prdata) begin
+				`uvm_error(get_type_name(), $sformatf("read data mismatch! ahb-data = %0h, apb-prdata = %0h",ahbl_pkt.hrwdata, apb_pkt.prdata))
+				err_flag = 1;
+			end	
 		//------------------------------------------
 		//Check read of write:
 		//------------------------------------------

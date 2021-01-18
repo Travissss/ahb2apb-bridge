@@ -118,7 +118,7 @@ cmsdk_ahb_to_apb #(
 /*output*/	.PWDATA		( apb_if_i.pwdata		),  
 /*output*/	.PSEL		( apb_if_i.psel			),    
 						  
-/*output*/	.APBACTIVE	( apb_active			),
+/*output*/	.APBACTIVE	( apbactive			),
 						  
 			.PRDATA		( apb_if_i.prdata		),  
 			.PREADY		( apb_if_i.pready		),  
@@ -138,9 +138,24 @@ end
 //----------------------------------------------
 // Assertion examples
 // ---------------------------------------------
+property p_psel_high_then_apbactive_high;
+	@(posedge pclk) disable_iff(!hresetn)
+	apb_if_i.psel |-> apbactive;
+endproperty
 
+property p_apbactive_high_then_psel_high;
+	@(posedge pclk) disable_iff(!hresetn)
+	$rose(apbactive) |=> apb_if_i.psel; 
+endproperty
 
+property p_hresp_hready;
+	@(posedge hclk) disable_iff(!hresetn)
+	ahbl_if_i.hresp |-> ahbl_if_i.hready && !$past(ahbl_if_i.hready);
+endproperty
 
+a_psel_high_then_apbactive_high : assert property(p_psel_high_then_apbactive_high);
+a_apbactive_high_then_psel_high : assert property(p_apbactive_high_then_psel_high);
+a_hresp_hready 					: assert property(p_hresp_hready);
 //----------------------------------------------
 // covergroups
 // ---------------------------------------------
