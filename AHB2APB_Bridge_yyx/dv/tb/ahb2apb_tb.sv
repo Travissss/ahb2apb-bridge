@@ -139,17 +139,17 @@ end
 // Assertion examples
 // ---------------------------------------------
 property p_psel_high_then_apbactive_high;
-	@(posedge pclk) disable_iff(!hresetn)
+	@(posedge pclk) disable iff(!hresetn)
 	apb_if_i.psel |-> apbactive;
 endproperty
 
 property p_apbactive_high_then_psel_high;
-	@(posedge pclk) disable_iff(!hresetn)
+	@(posedge pclk) disable iff(!hresetn)
 	$rose(apbactive) |=> apb_if_i.psel; 
 endproperty
 
 property p_hresp_hready;
-	@(posedge hclk) disable_iff(!hresetn)
+	@(posedge hclk) disable iff(!hresetn)
 	ahbl_if_i.hresp |-> ahbl_if_i.hready && !$past(ahbl_if_i.hready);
 endproperty
 
