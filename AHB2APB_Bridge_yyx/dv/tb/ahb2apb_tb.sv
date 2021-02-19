@@ -1,8 +1,9 @@
+
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: 		Travis
 // 
 // Create Date: 	12/21/2020 Mon 16:27
-// Filename: 		ahb2apb_tb.sv
+// Filename: 		ahb2apb_tb.v
 // class Name: 		ahb2apb_tb
 // Project Name: 	ahb2apb_bridge
 // Revision 0.01 - File Created 
@@ -19,7 +20,7 @@ import apb_slv_pkg::*;
 module ahb2apb_tb();
 	parameter 		HCLK_PERIOD = 100ns;		//10MHz
 	bit 	[1:0] 	tmp_var;
-	int 			HCLK_PCLK_RATIO;
+	int				HCLK_PCLK_RATIO;
 
 	reg				hclk;
 	wire			pclk;
@@ -141,6 +142,7 @@ end
 property p_psel_high_then_apbactive_high;
 	@(posedge pclk) disable iff(!hresetn)
 	apb_if_i.psel |-> apbactive;
+	//apb_if_i.psel |-> apbactive;
 endproperty
 
 property p_apbactive_high_then_psel_high;
@@ -150,7 +152,7 @@ endproperty
 
 property p_hresp_hready;
 	@(posedge hclk) disable iff(!hresetn)
-	ahbl_if_i.hresp |-> ahbl_if_i.hready && !$past(ahbl_if_i.hready);
+	ahbl_if_i.hresp |-> !ahbl_if_i.hready |=> ahbl_if_i.hready;
 endproperty
 
 a_psel_high_then_apbactive_high : assert property(p_psel_high_then_apbactive_high);
@@ -164,19 +166,32 @@ covergroup cg_clk_ratio();
 	option.per_instance = 1;
 	option.name = "cg_clk_ratio";
 	
-	clk_ratio: coverpoint HCLK_PCLK_RATIO;
+	clk_ratio: coverpoint HCLK_PCLK_RATIO {
+		bins h0 = {1};
+		bins h1 = {2};
+		bins h2 = {4};
+		bins h3 = {8};}
+endgroup
+
+covergroup cg_tmp_var_ratio();
+	option.per_instance = 1;
+	option.name = "cg_tmp_var_ratio";
+	
+	tmp_var_ratio: coverpoint tmp_var;
 endgroup
 
 cg_clk_ratio cg_clk_ratio_i = new();
+cg_tmp_var_ratio cg_tmp_var_ratio_i = new();
 
-always@(posedge hresetn) 
+always@(posedge hresetn)begin 
 	cg_clk_ratio_i.sample();
-
-
+	cg_tmp_var_ratio_i.sample();
+end
 `ifdef  DUMP_FSDB
 initial begin
 	$fsdbDumpfile("ahb2apb_bridge.fsdb");
 	$fsdbDumpvars;
+	$fsdbDumpSVA;
 end
 `endif
 endmodule

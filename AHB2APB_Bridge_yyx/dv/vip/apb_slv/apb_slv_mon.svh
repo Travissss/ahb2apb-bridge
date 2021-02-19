@@ -63,7 +63,8 @@ task apb_slv_mon::main_phase(uvm_phase phase);
 			pkt.pselx	= vif.mon_cb.psel		;
 			pkt.pprot	= vif.mon_cb.pprot		;			
 			pkt.kind	= vif.mon_cb.pwrite ? WRITE : READ;
-			pkt.data	= vif.mon_cb.pwrite ? vif.mon_cb.pwdata : vif.mon_cb.prdata;
+			pkt.data	= vif.mon_cb.pwdata;
+            pkt.prdata	= vif.mon_cb.prdata;
 			ap.write(pkt);
 		end
 	end

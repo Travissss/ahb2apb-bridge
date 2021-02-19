@@ -24,24 +24,30 @@ CASEDAT="	simulation.log
 export DUT_ROOT="/proj/fir0/wa/yyunxiao/yyx_downloads/git_download/ahb2apb_bridge/rtl"
 export DV_ROOT="/proj/fir0/wa/yyunxiao/yyx_downloads/git_download/ahb2apb_bridge/dv"
 export UVM_HOME="/proj/cadsim/datacom/bin/uvm/October_17_2014/uvm-1.2"
+export VERDI_HOME="proj/eda/SYNOPSYS/VERDI3/O-2018.09-SP1-1"
 DUT="-f $DUT_ROOT/rtl.f"
 TB="-f $DV_ROOT/etc/tb.f"
-CASEDIR="-f $DV_ROOT/tc"
+CASEDIR=$DV_ROOT/tc
 
+echo "DV_ROOT is: $DV_ROOT" 
+echo "CASEDIR is: $CASEDIR" 
+echo "All the Testcase includes: $ListL1" 
 ##################################################################################
 ##Compile & run options
-##support SV, UVM, Verdi¿? FSDB
+##support SV, UVM, Verdi? FSDB
 VCS_OPT="	-sverilog 
-			-timescale=1ns/1ns+incdir
-			+${UVM_HOME}/src ${UVM_HOME}/src/uvm.sv ${UVM_HOME}/src/dpi/uvm_dpi.cc -CFLAGS -DVCS
-			+define+DUMP_FSDB
-			-P ${VERDI_HOME}/share/PLI/VCS/LINUX/novas.tab ${VERDI_HOME}/share//PLI/VCS/LINUX/pli.a
+			-timescale=1ns/1ns
+			+incdir+${UVM_HOME}/src ${UVM_HOME}/src/uvm.sv ${UVM_HOME}/src/dpi/uvm_dpi.cc -CFLAGS -DVCS
 			-debug_all
 			-l compile.log "
-			
+
+FSDB_OPT="	+define+DUMP_FSDB
+			-P ${VERDI_HOME}/share/PLI/VCS/LINUX/novas.tab ${VERDI_HOME}/share//PLI/VCS/LINUX/pli.a"
+
 SIM_OPT="	sgsub ./${OUTPUT}
-			+fsdb+glitch=0 +fsdb+sva_index_info +fsdb+sva_status 
-			-sgq short:3m:1c -sgfg -l simulation.log"
+			-sgq short:1m:1c -sgfg -l simulation.log"
+
+WAV_OPT="	+fsdb+glitch=0 +fsdb+sva_index_info +fsdb+sva_status" 
 
 COV_OPT="-cm line+cond+fsm+tgl+branch+assert"
 
@@ -67,8 +73,8 @@ sim_one(){
 	echo "BEGIN SIMULATION TESTCASE $TestCaseName ......" | tee -a $Slog_file
 	
 	if [ "$SEED_DEF" == "" ]; then
-		SEED=8848 
-		#SEED=`date + %N` 
+		#SEED=8848 
+		SEED=`date +%N` 
 	fi
 	
 	# Sim prepare
@@ -93,20 +99,22 @@ sim_one(){
 	SIM_OPT="$SIM_OPT +ntb_random_seed=$SEED"
 	
 	if [ $COV_DEF ]; then
-		VCS_OPT="$SIM_OPT $COV_OPT"
 		SIM_OPT="$SIM_OPT $COV_OPT"
 	fi
 	
+	if [ $WAV_DEF ]; then
+		SIM_OPT="$SIM_OPT $WAV_OPT"
+	fi
+
 	echo "SIMULATION SEED :: $SEED" | tee -a $Slog_file | tee -a $Sreport_file
 	
-	#vcs $VCS_OPT $DUT $TB -o ${OUTPUT} -assert enable_diag -assert_dbgopt
 	$SIM_OPT +UVM_TESTNAME=$TestCaseName
 	
 	#Sim run done
 	cat $LOGFILE >> $Slog_file
 	
-	#pass_string=`sed -n 'Simulation Passed!' $LOGFILE`
-	pass_string=`sed -n '/^UVM_INFO.*Simulation Passed!/p' $LOGFILE`
+	#pass_string=`sed -n '/^UVM_INFO.*Simulation Passed!/p' $LOGFILE`
+	pass_string=`sed -n '/UVM_INFO.*Simulation Passed!/p' $LOGFILE`
 	echo "pass_string :: $pass_string" | tee -a $Slog_file
 	
 	echo -n "$TestCaseName SIMULATION RESULT: " | tee -a $Slog_file
@@ -167,13 +175,13 @@ i=0
 for TestcaseName in $TESTCASE
 do
 	echo "Simulation $TestcaseName"
-	if [ sim_one $TestcaseName ]; then
+	if  sim_one $TestcaseName ; then
 		sim_cnt=`expr $sim_cnt + 1`
 		echo "$TestcaseName Passed" >>$Sreport_file
 	else
 		err_cnt=`expr $err_cnt + 1`
 		sim_cnt=`expr $sim_cnt + 1`
-		echo "$TestcaseName Passed" >>$Sreport_file
+		echo "$TestcaseName Failed" >>$Sreport_file
 	fi
 	i=`expr $i + 1`		
 done
@@ -201,7 +209,7 @@ do
 	
 	-rpt)
 		RepeatSim=1;shift;
-		if [ $1 != ""]; then
+		if [ $1 != "" ]; then
 			RepeatTimes=$1
 			shift
 		else
@@ -213,21 +221,47 @@ do
 	
 	-cov)
 		COV_DEF=1;shift;;
+
+	-fsdb)
+		WAV_DEF=1;shift;;
 		
 	-seed)
 		SEED_DEF=1; shift;
-		if [$1 != ""]; then
+		if [ $1 != "" ]; then
 			SEED=$1
 			shift
 		fi
 		;;
+
+	-com)
+		COM_DEF=1;shift;;
+
 	*)
 		TESTCASEIN="$TESTCASEIN $1";shift;;
 	esac
 done
 
+if [ $COM_DEF ]; then
+
+	if [ $COV_DEF ]; then
+		VCS_OPT="$VCS_OPT $COV_OPT"
+	fi
+	
+	if [ $WAV_DEF ]; then
+		VCS_OPT="$VCS_OPT $FSDB_OPT"
+	fi
+
+
+	vcs -sgq short:1m:1c $VCS_OPT $TB -o ${OUTPUT} -assert enable_diag -assert_dbgopt
+	echo "Compile Finished"
+
+fi
+
+	echo "SIMULATION SEED :: $SEED" | tee -a $Slog_file | tee -a $Sreport_file
+
+
 if [ $ALLSim ]; then
-	ListL1=`ls $CaseDir`
+	ListL1=`ls $CASEDIR`
 	for FileNameL1 in $ListL1
 	do
 		testname=${FileNameL1%\.sv}		#remove ".sv"
@@ -278,7 +312,8 @@ if [ $COV_DEF ]; then
 	fi
 	
 	cd $ResDir
-	echo "urg -dir */*.vdb -dbname cov_rpt/all "
+	echo "urg -dir *.vdb -dbname cov_rpt/all " 
+	urg -sgq short:3m:1c -dir result/*/*.vdb -report both  
 	
 	cd -
 fi

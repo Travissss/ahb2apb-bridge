@@ -46,7 +46,7 @@ class ahbl_trans extends uvm_sequence_item;
 		`uvm_field_int			(bst_beats,	      	UVM_ALL_ON)
 		`uvm_field_queue_int	(haddr_q,          	UVM_ALL_ON)
 		`uvm_field_queue_int	(hrwdata_q,        	UVM_ALL_ON)
-		`uvm_field_queue_enum	(htrans_t,	htrans_q,         	UVM_ALL_ON)
+		`uvm_field_queue_enum	(htrans_t, htrans_q, UVM_ALL_ON)
 							                 	
 		`uvm_field_int			(haddr_idx,	      	UVM_ALL_ON)
 		`uvm_field_int			(hrwdata_idx,      	UVM_ALL_ON)
