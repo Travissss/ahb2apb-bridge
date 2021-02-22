@@ -239,6 +239,9 @@ do
 	-com)
 		COM_DEF=1;shift;;
 
+	-urg)
+		URG_DEF=1;shift;;
+
 	*)
 		TESTCASEIN="$TESTCASEIN $1";shift;;
 	esac
@@ -315,11 +318,22 @@ if [ $COV_DEF ]; then
 	fi
 	
 	cd $ResDir
-	echo "urg -sgq short:3m:1c -dir result/*/*.vdb -report both"  
-	echo "firefox both/tests.html"  
 	cd -
 fi
 
+if [ $URG_DEF ]; then
+	rm -rf *.vdb
+	for Testcase_urg in $TESTCASE
+	do
+		echo "merge coverage command::urg -dir result/$Testcase_urg"_[0-9]"*/*.vdb -dbname ./$Testcase_urg -sgq short:3m:1c"
+		urg -dir result/$Testcase_urg"_[0-9]"*/*.vdb -dbname ./$Testcase_urg -sgq short:3m:1c
+	done
+	echo "urg -sgq short:3m:1c -dir */*.vdb -report both"  
+	urg -sgq short:3m:1c -dir *.vdb -report both  
+
+	echo "firefox ./both/tests.html"  
+	firefox ./both/tests.html  
+fi
 cp $Sreport_file $ResDir/.
 
 exit
