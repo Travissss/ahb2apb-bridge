@@ -19,8 +19,8 @@ import apb_slv_pkg::*;
 
 module ahb2apb_tb();
 	parameter 		HCLK_PERIOD = 100ns;		//10MHz
-	bit 	[1:0] 	tmp_var;
-	int				HCLK_PCLK_RATIO;
+	//bit 	[1:0] 	tmp_var;
+	logic	[3:0]	HCLK_PCLK_RATIO;
 
 	reg				hclk;
 	wire			pclk;
@@ -36,16 +36,22 @@ ahbl_if		ahbl_if_i(hclk, hresetn);
 apb_if		apb_if_i(pclk, presetn);
 reset_if	reset_if_i(hclk);
 
+//tmp_var = $urandom_range(0, 3);
 //generate HCLK_PCLK_RATIO randomly;
-initial begin
-	tmp_var = $urandom_range(0, 3);
-	case(tmp_var)
-		0:HCLK_PCLK_RATIO = 1;
-		1:HCLK_PCLK_RATIO = 2;
-		2:HCLK_PCLK_RATIO = 4;
-		3:HCLK_PCLK_RATIO = 8;
-	endcase
-end
+
+//assign HCLK_PCLK_RATIO = ((ahbl_if_i.clk_ratio == 0) ? 1: ((ahbl_if_i.clk_ratio == 1) ? 2 :((ahbl_if_i.clk_ratio == 2) ? 4 : 8)));
+assign HCLK_PCLK_RATIO = ahbl_if_i.clk_ratio;
+
+//always@(ahbl_if_i.clk_ratio)
+//begin
+//	case(ahbl_if_i.clk_ratio)
+//		0:HCLK_PCLK_RATIO = 1;
+//		1:HCLK_PCLK_RATIO = 2;
+//		2:HCLK_PCLK_RATIO = 4;
+//		3:HCLK_PCLK_RATIO = 8;
+//	endcase
+//	
+//end
 
 //generate hclk with HCLK_PERIOD/2;
 initial begin
@@ -162,30 +168,29 @@ a_hresp_hready 					: assert property(p_hresp_hready);
 // covergroups
 // ---------------------------------------------
 
-covergroup cg_clk_ratio();
+covergroup cg_hclk_pclk_ratio();
 	option.per_instance = 1;
-	option.name = "cg_clk_ratio";
+	option.name = "cg_hclk_pclk_ratio";
 	
-	clk_ratio: coverpoint HCLK_PCLK_RATIO {
-		bins h0 = {1};
-		bins h1 = {2};
-		bins h2 = {4};
-		bins h3 = {8};}
+	hclk_pclk_ratio: coverpoint HCLK_PCLK_RATIO {
+		bins h0 = {4'h1};
+		bins h1 = {4'h2};
+		bins h2 = {4'h4};
+		bins h3 = {4'h8};}
 endgroup
 
-covergroup cg_tmp_var_ratio();
-	option.per_instance = 1;
-	option.name = "cg_tmp_var_ratio";
-	
-	tmp_var_ratio: coverpoint tmp_var;
-endgroup
-
-cg_clk_ratio cg_clk_ratio_i = new();
-cg_tmp_var_ratio cg_tmp_var_ratio_i = new();
+//covergroup cg_tmp_var_ratio();
+//	option.per_instance = 1;
+//	option.name = "cg_tmp_var_ratio";
+//	
+//	tmp_var_ratio: coverpoint tmp_var;
+//endgroup
+cg_hclk_pclk_ratio cg_hclk_pclk_ratio_i = new() ;
+//cg_tmp_var_ratio cg_tmp_var_ratio_i = new();
 
 always@(posedge hresetn)begin 
-	cg_clk_ratio_i.sample();
-	cg_tmp_var_ratio_i.sample();
+	cg_hclk_pclk_ratio_i.sample();
+	//cg_tmp_var_ratio_i.sample();
 end
 `ifdef  DUMP_FSDB
 initial begin

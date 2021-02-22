@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Travis
+// Engineer: 		Yunxiao
 // 
 // Create Date: 	12/17/2020 Thu 10:53
 // Filename: 		func_cov.sv
@@ -19,17 +19,18 @@ class func_cov extends uvm_object;
 		option.per_instance = 1;
 		haddr: coverpoint ahb_pkt.haddr [15:0] {bins a1		= {16'h0000};
 												bins a2		= {16'h0001};
-												bins a3		= {16'h0002};
-												bins a4		= {16'h0003};
-												bins a5		= {16'hffff};
-												bins a6		= {16'hfffe};
-												bins a7		= {16'hfffd};
-												bins a8 	= {16'hfffc};
-												bins a9[4] 	= {[16'h0004 : 16'hfffb]};
+												bins a3		= {16'hffff};
+												bins a4		= {16'hfffe};
+												bins a5[4] 	= {[16'h0002 : 16'hfffd]};
 												}
-		hwrite:	coverpoint ahb_pkt.hwrite;
-		hburst:	coverpoint ahb_pkt.hburst;
-		hsize:	coverpoint ahb_pkt.hsize;  
+		hwrite		:	coverpoint ahb_pkt.hwrite;
+		hburst		:	coverpoint ahb_pkt.hburst;
+		hsize		:	coverpoint ahb_pkt.hsize;  
+		clk_ratio	:	coverpoint ahb_pkt.clk_ratio[3:0]{	bins c0	= {4'h1};
+															bins c1	= {4'h2};
+															bins c2	= {4'h4};
+															bins c3	= {4'h8};
+															}  
 	
 		cross haddr, hwrite, hburst, hsize;
 	endgroup
@@ -45,3 +46,4 @@ class func_cov extends uvm_object;
 	// User Defined Methods:
 	
 endclass
+

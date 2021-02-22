@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Travis
+// Engineer: 		Yunxiao
 // 
 // Create Date: 	12/14/2020 22:16
 // Filename: 		ahbl_mst_mon.svh
@@ -89,5 +89,6 @@ task ahbl_mst_mon::samp_apha(ref ahbl_trans pkt);
 	pkt.hburst 	= hburst_t'(vif.mon_cb.hburst);	
 	pkt.hprot 	= vif.mon_cb.hprot 	;
 	pkt.hwrite 	= vif.mon_cb.hwrite ;	
+	pkt.clk_ratio = vif.clk_ratio;
 endtask
 `endif

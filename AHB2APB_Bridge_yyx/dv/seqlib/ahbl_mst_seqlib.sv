@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Travis
+// Engineer: 		Yunxiao
 // 
 // Create Date: 	12/23/2020 Wed 21:13
 // Filename: 		ahbl_mst_seqlib.sv
@@ -65,7 +65,10 @@ class ahbl_mst_burst_seq extends ahbl_mst_basic_seq;
 	endfunction
 	
 	virtual task body();
-		`uvm_do_with(req, {	hsel == 1'b1; })
+		`uvm_do_with(req, {	hsel == 1'b1; //})
+							hburst != SINGLE;
+							})
+
 	endtask
 		
 endclass

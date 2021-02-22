@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: 		Travis
+// Engineer: 		Yunxiao
 // 
 // Create Date: 	12/03/2020 23:35:17 PM
 // Filename: 		ahbl_if.sv
@@ -24,11 +24,11 @@ interface ahbl_if(input hclk, input hresetn);
 	logic	[31:0]	hrdata;
 	logic			hready;
 	logic			hresp;
+	bit		[3:0]	clk_ratio;
 	
 	clocking mst_cb@(posedge hclk);
 		// default input #1 output #1;
 		input	hresetn;
-		
 		output	hsel;
 		output	haddr;
 		output	htrans;
@@ -37,6 +37,7 @@ interface ahbl_if(input hclk, input hresetn);
 		output	hprot;
 		output	hwrite;
 		output	hwdata;
+		output 	clk_ratio;
 		
 		input 	hrdata;
 		input 	hready;
@@ -58,6 +59,7 @@ interface ahbl_if(input hclk, input hresetn);
 		input 	hrdata;
 		input 	hready;
 		input 	hresp;
+		input 	clk_ratio;
 	endclocking
 
 endinterface

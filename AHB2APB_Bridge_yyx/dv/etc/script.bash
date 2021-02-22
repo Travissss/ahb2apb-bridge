@@ -24,7 +24,7 @@ CASEDAT="	simulation.log
 export DUT_ROOT="/proj/fir0/wa/yyunxiao/yyx_downloads/git_download/ahb2apb_bridge/rtl"
 export DV_ROOT="/proj/fir0/wa/yyunxiao/yyx_downloads/git_download/ahb2apb_bridge/dv"
 export UVM_HOME="/proj/cadsim/datacom/bin/uvm/October_17_2014/uvm-1.2"
-export VERDI_HOME="proj/eda/SYNOPSYS/VERDI3/O-2018.09-SP1-1"
+export VERDI_HOME_X="proj/eda/SYNOPSYS/VERDI3/O-2018.09-SP1-1"
 DUT="-f $DUT_ROOT/rtl.f"
 TB="-f $DV_ROOT/etc/tb.f"
 CASEDIR=$DV_ROOT/tc
@@ -42,7 +42,7 @@ VCS_OPT="	-sverilog
 			-l compile.log "
 
 FSDB_OPT="	+define+DUMP_FSDB
-			-P ${VERDI_HOME}/share/PLI/VCS/LINUX/novas.tab ${VERDI_HOME}/share//PLI/VCS/LINUX/pli.a"
+			-P ${VERDI_HOME_X}/share/PLI/VCS/LINUX/novas.tab ${VERDI_HOME_X}/share//PLI/VCS/LINUX/pli.a"
 
 SIM_OPT="	sgsub ./${OUTPUT}
 			-sgq short:1m:1c -sgfg -l simulation.log"
@@ -96,19 +96,22 @@ sim_one(){
 	
 	# Sim run
 	
-	SIM_OPT="$SIM_OPT +ntb_random_seed=$SEED"
-	
 	if [ $COV_DEF ]; then
-		SIM_OPT="$SIM_OPT $COV_OPT"
+		echo "SIMULATION SEED :: $SEED" | tee -a $Slog_file | tee -a $Sreport_file
+		echo "Simulation Command is $SIM_OPT"	
+	
+		$SIM_OPT $COV_OPT +UVM_TESTNAME=$TestCaseName +ntb_random_seed=$SEED
+	else 
+		echo "SIMULATION SEED :: $SEED" | tee -a $Slog_file | tee -a $Sreport_file
+		echo "Simulation Command is $SIM_OPT"	
+	
+		$SIM_OPT +UVM_TESTNAME=$TestCaseName +ntb_random_seed=$SEED
 	fi
 	
-	if [ $WAV_DEF ]; then
-		SIM_OPT="$SIM_OPT $WAV_OPT"
-	fi
+#	if [ $WAV_DEF ]; then
+#		SIM_OPT="$SIM_OPT $WAV_OPT"
+#	fi
 
-	echo "SIMULATION SEED :: $SEED" | tee -a $Slog_file | tee -a $Sreport_file
-	
-	$SIM_OPT +UVM_TESTNAME=$TestCaseName
 	
 	#Sim run done
 	cat $LOGFILE >> $Slog_file
@@ -312,9 +315,8 @@ if [ $COV_DEF ]; then
 	fi
 	
 	cd $ResDir
-	echo "urg -dir *.vdb -dbname cov_rpt/all " 
-	urg -sgq short:3m:1c -dir result/*/*.vdb -report both  
-	
+	echo "urg -sgq short:3m:1c -dir result/*/*.vdb -report both"  
+	echo "firefox both/tests.html"  
 	cd -
 fi
 

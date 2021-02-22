@@ -68,6 +68,7 @@ task ahbl_mst_drv::main_phase(uvm_phase phase);
 			vif.mst_cb.hprot	<= 4'b0;
 			vif.mst_cb.hwrite	<= 1'b0;
 			vif.mst_cb.hwdata	<= 32'b0;					
+			vif.mst_cb.clk_ratio<= 4'h1;
 			pkt_dpha = null;
 			pkt_apha = null;
 		end
@@ -116,6 +117,7 @@ task ahbl_mst_drv::drive_lcyc_pkt_apha(ref ahbl_trans pkt);
 		vif.mst_cb.hburst	<= pkt.hburst;
 		vif.mst_cb.hprot	<= pkt.hprot;
 		vif.mst_cb.hwrite	<= pkt.hwrite;
+		vif.mst_cb.clk_ratio<= pkt.clk_ratio;
 		this.pkt_dpha <= this.pkt_apha;
 	end
 endtask
@@ -128,5 +130,6 @@ task ahbl_mst_drv::drive_lcyc_pkt_idle();
 	vif.mst_cb.hburst	<= SINGLE;
  	vif.mst_cb.hprot	<= 4'b0;
 	vif.mst_cb.hwrite	<= 1'b0;
+ 	vif.mst_cb.clk_ratio<= 4'h1;
 endtask
 `endif

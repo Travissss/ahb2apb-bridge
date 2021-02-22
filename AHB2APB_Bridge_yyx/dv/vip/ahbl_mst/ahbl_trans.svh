@@ -20,6 +20,8 @@ class ahbl_trans extends uvm_sequence_item;
 	rand logic		[31:0]	hrwdata = 32'b0;
 	rand logic				hresp = 1'b0;
 	rand logic				hreadyout = 1'b1;
+
+	rand logic		[3:0]	clk_ratio = 4'h1;
 	
 	protected rand int unsigned	bst_beats;
 	protected rand logic [31:0] haddr_q[$];
@@ -41,12 +43,13 @@ class ahbl_trans extends uvm_sequence_item;
 		`uvm_field_int			(hwrite, 			UVM_ALL_ON)
 		`uvm_field_int			(hrwdata, 			UVM_ALL_ON)
 		`uvm_field_int			(hreadyout,			UVM_ALL_ON)
+		`uvm_field_int			(clk_ratio,			UVM_ALL_ON)
 		`uvm_field_int			(hresp,				UVM_ALL_ON)
 		
 		`uvm_field_int			(bst_beats,	      	UVM_ALL_ON)
 		`uvm_field_queue_int	(haddr_q,          	UVM_ALL_ON)
 		`uvm_field_queue_int	(hrwdata_q,        	UVM_ALL_ON)
-		`uvm_field_queue_enum	(htrans_t, htrans_q, UVM_ALL_ON)
+		`uvm_field_queue_enum	(htrans_t,	htrans_q,         	UVM_ALL_ON)
 							                 	
 		`uvm_field_int			(haddr_idx,	      	UVM_ALL_ON)
 		`uvm_field_int			(hrwdata_idx,      	UVM_ALL_ON)
@@ -93,7 +96,12 @@ class ahbl_trans extends uvm_sequence_item;
 		solve bst_beats before hrwdata_q;
 		solve bst_beats before htrans_q;
 	}
-	
+
+	logic [3:0] array_ratio[] ='{4'h1,4'h2,4'h4,4'h8};	
+	constraint clk_ratio_constr{
+		clk_ratio inside array_ratio;	
+	}
+
 	//----------------------------------------------
 	// Methods
 	// ---------------------------------------------
