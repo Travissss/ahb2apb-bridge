@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: 		Travis
 // 
-// Create Date: 	12/21/2020 Mon 16:27
+// Create Date: 	12/21/2020 Mon 
 // Filename: 		ahb2apb_tb.v
 // class Name: 		ahb2apb_tb
 // Project Name: 	ahb2apb_bridge

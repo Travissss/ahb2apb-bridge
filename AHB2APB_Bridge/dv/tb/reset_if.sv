@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: 		Travis
 // 
-// Create Date: 	12/21/2020 Mon 16:40
+// Create Date: 	12/21/2020 Mon 19:40
 // Filename: 		reset_if.sv
 // class Name: 		reset_if
 // Project Name: 	ahb2apb_bridge

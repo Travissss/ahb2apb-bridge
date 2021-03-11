@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: 		Travis
 // 
-// Create Date: 	12/17/2020 Thu 10:30
+// Create Date: 	12/17/2020 Thu 20:30
 // Filename: 		ahb2apb_scb.svh
 // class Name: 		ahb2apb_scb
 // Project Name: 	ahb2apb_bridge
@@ -154,10 +154,6 @@ task ahb2apb_scb::check_pkt();
 			err_flag = 1;
 		end
 		
-		if(ahbl_pkt.hresp != apb_pkt.pslverr) begin
-			`uvm_error(get_type_name(), $sformatf("hresp/pslverr mismatch hresp:[%0h], pslverr:[%0h]", ahbl_pkt.hresp, apb_pkt.pslverr ))
-			err_flag = 1;
-		end
 		//final-display if correct
 		if(err_flag)
 			`uvm_error(get_type_name(), "Pkt comparing failed")
