@@ -66,7 +66,7 @@ class ahbl_mst_burst_seq extends ahbl_mst_basic_seq;
 	
 	virtual task body();
 		`uvm_do_with(req, {	hsel == 1'b1; //})
-							hburst != SINGLE;
+							hburst inside {[1:7]};
 							})
 
 	endtask

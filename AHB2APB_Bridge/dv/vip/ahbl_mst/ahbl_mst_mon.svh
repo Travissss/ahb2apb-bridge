@@ -61,7 +61,7 @@ task ahbl_mst_mon::main_phase(uvm_phase phase);
 		if(!vif.mon_cb.hresetn)
 			pkt = null;
 		else begin
-			if(vif.mon_cb.hready) begin
+			if(vif.mon_cb.hready & vif.mon_cb.htrans[1]) begin
 				if(pkt != null) begin
 					samp_dpha(pkt);
 					ap.write(pkt);

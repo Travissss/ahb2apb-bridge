@@ -49,8 +49,6 @@ endfunction
 //Build_Phase
 function void ahbl_mst_drv::build_phase(uvm_phase phase);
 	super.build_phase(phase);
-	pkt_apha = ahbl_trans::type_id::create("pkt_apha");
-	pkt_dpha = ahbl_trans::type_id::create("pkt_dpha");
 	if(!uvm_config_db#(virtual ahbl_if)::get(this,"","vif",vif))
 		`uvm_fatal("my_driver", "Error in Getting interface")
 endfunction

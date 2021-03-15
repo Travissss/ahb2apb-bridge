@@ -17,7 +17,7 @@ class ahbl_mst_burst_apb_slv_slverr extends ahb2apb_base_test;
 	// Data, Interface, port  Members
 	//------------------------------------------
 	ahbl_mst_burst_seq		ahbl_mst_burst_seq_i;
-	apb_slv_pslverr_seq		apb_slv_pslverr_seq_i;
+	apb_slv_slverr_seq		apb_slv_pslverr_seq_i;
 
 	
 	//Factory Registration
@@ -44,7 +44,7 @@ endfunction
 function void ahbl_mst_burst_apb_slv_slverr::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	ahbl_mst_burst_seq_i = ahbl_mst_burst_seq::type_id::create("ahbl_mst_burst_seq_i");
-	apb_slv_pslverr_seq_i = apb_slv_pslverr_seq::type_id::create("apb_slv_pslverr_seq_i");
+	apb_slv_slverr_seq_i = apb_slv_pslverr_seq::type_id::create("apb_slv_pslverr_seq_i");
 endfunction
 
 //Main_Phase

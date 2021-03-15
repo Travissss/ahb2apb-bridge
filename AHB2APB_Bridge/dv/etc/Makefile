@@ -5,7 +5,8 @@ test = ahbl_mst_tight_transfer
 
 OUTPUT = ahb2apb_bridge
 
-VCS =	vcs -sgq short:3m:1c -sverilog -timescale=1ns/1ns \
+VCS =	vcs -sgq short:3m:1c -sverilog	\
+	-override_timescale=1ns/1ns \
 	-cm line+cond+fsm+tgl+branch+assert\
 	-debug_all \
 	+incdir+$(UVM_HOME)/src $(UVM_HOME)/src/uvm.sv \
