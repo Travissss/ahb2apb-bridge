@@ -1,4 +1,5 @@
 
+
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: 		Travis
 // 
@@ -19,7 +20,7 @@ import apb_slv_pkg::*;
 
 module ahb2apb_tb();
 	parameter 		HCLK_PERIOD = 100ns;		//10MHz
-	//bit 	[1:0] 	tmp_var;
+	bit 	[1:0] 	tmp_var;
 	logic	[3:0]	HCLK_PCLK_RATIO;
 
 	reg				hclk;
@@ -36,22 +37,26 @@ ahbl_if		ahbl_if_i(hclk, hresetn);
 apb_if		apb_if_i(pclk, presetn);
 reset_if	reset_if_i(hclk);
 
-//tmp_var = $urandom_range(0, 3);
+initial begin
+
+	tmp_var = $urandom_range(0, 3);
+
+end
 //generate HCLK_PCLK_RATIO randomly;
 
 //assign HCLK_PCLK_RATIO = ((ahbl_if_i.clk_ratio == 0) ? 1: ((ahbl_if_i.clk_ratio == 1) ? 2 :((ahbl_if_i.clk_ratio == 2) ? 4 : 8)));
-assign HCLK_PCLK_RATIO = ahbl_if_i.clk_ratio;
+// assign HCLK_PCLK_RATIO = ahbl_if_i.clk_ratio;
 
-//always@(ahbl_if_i.clk_ratio)
-//begin
-//	case(ahbl_if_i.clk_ratio)
-//		0:HCLK_PCLK_RATIO = 1;
-//		1:HCLK_PCLK_RATIO = 2;
-//		2:HCLK_PCLK_RATIO = 4;
-//		3:HCLK_PCLK_RATIO = 8;
-//	endcase
-//	
-//end
+always@(hclk)
+begin
+	case(tmp_var)
+		0:HCLK_PCLK_RATIO = 1;
+		1:HCLK_PCLK_RATIO = 2;
+		2:HCLK_PCLK_RATIO = 4;
+		3:HCLK_PCLK_RATIO = 8;
+	endcase
+	
+end
 
 //generate hclk with HCLK_PERIOD/2;
 initial begin
@@ -172,7 +177,7 @@ covergroup cg_hclk_pclk_ratio();
 	option.per_instance = 1;
 	option.name = "cg_hclk_pclk_ratio";
 	
-	hclk_pclk_ratio: coverpoint HCLK_PCLK_RATIO {
+	hclk_pclk_ratio: coverpoint HCLK_PCLK_RATIO[3:0] {
 		bins h0 = {4'h1};
 		bins h1 = {4'h2};
 		bins h2 = {4'h4};
