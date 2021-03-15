@@ -15,13 +15,13 @@ interface reset_if(input clk);
 	logic	reset;
 	
 	task reset_dut;
-	begin
-		reset = 1'b0;
-		#5ns;
-		reset = 1'b1;
-		#2ns;
-		reset = 1'b0;
-	end
+		begin
+			reset = 1'b0;
+			#5ns;
+			reset = 1'b1;
+			#2ns;
+			reset = 1'b0;
+		end
 	endtask
 
 endinterface

@@ -5,6 +5,7 @@
 +incdir+$DV_ROOT/vip/apb_slv
 
 //Source file
+$DV_ROOT/../rtl/cmsdk_ahb_to_apb.v
 $DV_ROOT/vip/ahbl_mst/ahbl_mst_pkg.svh
 $DV_ROOT/vip/apb_slv/apb_slv_pkg.svh
 $DV_ROOT/env/ahb2apb_pkg.sv
