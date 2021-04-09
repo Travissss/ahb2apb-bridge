@@ -148,7 +148,7 @@ initial begin
 end
 
 //----------------------------------------------
-// Assertion examples
+// Assertion examples 
 // ---------------------------------------------
 property p_psel_high_then_apbactive_high;
 	@(posedge pclk) disable iff(!hresetn)
@@ -163,7 +163,7 @@ endproperty
 
 property p_hresp_hready;
 	@(posedge hclk) disable iff(!hresetn)
-	ahbl_if_i.hresp |-> !ahbl_if_i.hready |=> ahbl_if_i.hready;
+	ahbl_if_i.hresp |-> ahbl_if_i.hready && !$past(ahbl_if_i.hready);
 endproperty
 
 a_psel_high_then_apbactive_high : assert property(p_psel_high_then_apbactive_high);
